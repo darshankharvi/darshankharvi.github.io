@@ -1,0 +1,62 @@
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.cursor-blink{ animation: blink 1s infinite; }
+
+.terminal-output{
+  height: calc(100vh - 140px);
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#4a5568 #2d3748;
+}
+.terminal-output::-webkit-scrollbar{ width:8px; }
+.terminal-output::-webkit-scrollbar-track{ background:#2d3748; }
+.terminal-output::-webkit-scrollbar-thumb{ background-color:#4a5568; border-radius:4px; }
+.command-input{ caret-color:#68d391; }
+.history-item:hover{ background-color:#2d3748; cursor:pointer; }
+
+.badge-strap{ 
+  width:2px; 
+  height:110px; 
+  background:linear-gradient(#1f2937,#10b981,#1f2937); 
+  margin:0 auto 10px auto; 
+  border-radius:2px; 
+}
+.glass{ background: rgba(31,41,55,0.6); backdrop-filter: blur(4px); }
+
+.nav-link{ color:#9ae6b4; }
+.nav-link:hover{ color:#68d391; text-decoration: underline; }
+
+.footer-clock{ position: fixed; right: 12px; bottom: 10px; color:#9aa5b1; font-size: 12px; }
+
+/* Spring badge styles */
+.badge-wrap { perspective: 800px; }
+#strap { transform-origin: top center; }
+#badgeCard { will-change: transform; cursor: grab; user-select: none; }
+#badgeCard:active { cursor: grabbing; }
+.dragging #strap, .dragging #badgeCard { transition: none !important; }
+
+/* Profile Photo Styling */
+#profile-photo {
+  filter: grayscale(20%) brightness(0.9) contrast(1.1);
+  transition: filter 0.3s ease;
+}
+
+#profile-photo:hover {
+  filter: grayscale(0%) brightness(1) contrast(1.2);
+}
+
+/* Enhanced card styling */
+.glass {
+  background: rgba(31,41,55,0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ADD THIS: Prevent body scroll when dragging */
+.noscroll {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+}
