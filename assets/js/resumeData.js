@@ -23,8 +23,7 @@ window.ResumeData = {
   
   experience: [
     { role:"AI & ML Internship", org:"Aqmenz Automation Pvt. Ltd", time:"Mar 2023 – Apr 2023, Bengaluru", desc:"Built temperature‑based ice‑cream sales predictor using Python and ML (linear regression, time series)." },
-    { role:"Cyber Risk & Regulatory Trainee", org:"PwC India", time:"Sept 2024 – June 2025, Bengaluru", desc:"Hands‑on in cybersecurity, Python automation, prompt engineering, and scripting; delivered secure scripts and internal assessments." },
-    { role:"Intern", org:"IndoSkill", time:"(Period not specified)", desc:"Training in AI & ML foundations." }
+    { role:"Cyber Risk & Regulatory Trainee", org:"PwC India", time:"Sept 2024 – June 2025, Bengaluru", desc:"Hands‑on in cybersecurity, Python automation, prompt engineering, and scripting; delivered secure scripts and internal assessments." }
   ],
   
   education: [
