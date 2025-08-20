@@ -1,18 +1,65 @@
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 .cursor-blink{ animation: blink 1s infinite; }
 
+/* Prevent horizontal scroll on mobile */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  box-sizing: border-box;
+}
+
+body > div {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Box sizing for all elements */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.container {
+  overflow-x: hidden;
+  padding: 16px 8px;
+  max-width: 100vw;
+}
+
+/* Responsive Terminal */
 .terminal-output{
-  height: calc(100vh - 140px);
+  height: calc(100vh - 200px);
   overflow-y:auto;
+  overflow-x: hidden;
   scrollbar-width:thin;
   scrollbar-color:#4a5568 #2d3748;
+  word-wrap: break-word;
 }
+
+@media (max-width: 768px) {
+  .terminal-output {
+    height: calc(100vh - 280px);
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .container {
+    padding: 8px;
+  }
+}
+
 .terminal-output::-webkit-scrollbar{ width:8px; }
 .terminal-output::-webkit-scrollbar-track{ background:#2d3748; }
 .terminal-output::-webkit-scrollbar-thumb{ background-color:#4a5568; border-radius:4px; }
-.command-input{ caret-color:#68d391; }
+
+/* Mobile-optimized input */
+.command-input{ 
+  caret-color:#68d391; 
+  font-size: 16px !important; /* Prevents iOS zoom */
+  min-height: 44px;
+}
+
 .history-item:hover{ background-color:#2d3748; cursor:pointer; }
 
+/* Responsive Badge */
 .badge-strap{ 
   width:2px; 
   height:110px; 
@@ -20,17 +67,70 @@
   margin:0 auto 10px auto; 
   border-radius:2px; 
 }
-.glass{ background: rgba(31,41,55,0.6); backdrop-filter: blur(4px); }
 
+@media (max-width: 768px) {
+  .badge-strap {
+    height: 80px;
+  }
+  
+  .badge-wrap, .glass {
+    width: 100% !important;
+    max-width: 320px !important;
+  }
+  
+  #badgeCard {
+    width: 100% !important;
+    max-width: 280px !important;
+    padding: 16px !important;
+  }
+}
+
+.glass{ 
+  background: rgba(31,41,55,0.6); 
+  backdrop-filter: blur(4px); 
+  max-width: 100%;
+}
+
+/* Navigation */
 .nav-link{ color:#9ae6b4; }
 .nav-link:hover{ color:#68d391; text-decoration: underline; }
 
-.footer-clock{ position: fixed; right: 12px; bottom: 10px; color:#9aa5b1; font-size: 12px; }
+@media (max-width: 768px) {
+  .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    font-size: 16px;
+  }
+}
 
-/* Spring badge styles */
+.footer-clock{ 
+  position: fixed; 
+  right: 12px; 
+  bottom: 10px; 
+  color:#9aa5b1; 
+  font-size: 12px; 
+}
+
+@media (max-width: 768px) {
+  .footer-clock {
+    right: 8px;
+    bottom: 8px;
+    font-size: 11px;
+  }
+}
+
+/* Spring badge styles with mobile fixes */
 .badge-wrap { perspective: 800px; }
 #strap { transform-origin: top center; }
-#badgeCard { will-change: transform; cursor: grab; user-select: none; }
+#badgeCard { 
+  will-change: transform; 
+  cursor: grab; 
+  user-select: none;
+  touch-action: none; /* Prevents scrolling during drag on mobile */
+}
 #badgeCard:active { cursor: grabbing; }
 .dragging #strap, .dragging #badgeCard { transition: none !important; }
 
@@ -51,7 +151,7 @@
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* ADD THIS: Prevent body scroll when dragging */
+/* Scroll prevention during drag */
 .noscroll {
   overflow: hidden !important;
   position: fixed !important;
@@ -60,20 +160,15 @@
   top: 0 !important;
   left: 0 !important;
 }
-/* ... your existing styles ... */
 
-/* Responsive improvements */
+/* Mobile grid fixes */
 @media (max-width: 768px) {
-  .container { padding: 8px; }
-  .glass, #badgeCard { max-width: 90vw; }
-  .terminal-output { font-size: 14px; padding: 10px; }
-  .nav-link { min-height: 44px; font-size: 15px; }
-  #badgeCard, .glass { width: auto !important; min-width: 0; }
-  aside, section { width: 100%; }
-  .flex.items-center.mb-4 { flex-wrap: wrap; }
-  body { padding: 0 !important; }
-}
-input[type="text"], .command-input {
-  font-size: 16px !important; /* Prevents iOS zoom */
-  min-height: 44px;
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  aside, section {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }

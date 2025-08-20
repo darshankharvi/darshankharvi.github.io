@@ -13,9 +13,12 @@
     let scrollLocked = false;
     let scrollPosition = { top: 0, left: 0 };
 
+    // Detect mobile device
+    const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+
     function setTransforms(y) {
-      const stretch = 1 + Math.min(Math.abs(y) / 220, 0.25);
-      const tilt = Math.max(Math.min(y / 10, 10), -10);
+      const stretch = 1 + Math.min(Math.abs(y) / (isMobile ? 180 : 220), 0.25);
+      const tilt = Math.max(Math.min(y / (isMobile ? 8 : 10), isMobile ? 6 : 10), isMobile ? -6 : -10);
       strap.style.transform = `scaleY(${stretch})`;
       card.style.transform = `translateY(${y}px) rotateX(${tilt}deg)`;
     }
@@ -33,6 +36,9 @@
       document.body.style.right = '0';
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
+      
+      // Additional mobile-specific scroll prevention
+      document.addEventListener('touchmove', preventScroll, { passive: false });
     }
 
     function unlockScroll() {
@@ -47,24 +53,46 @@
       document.body.style.overflow = '';
       
       window.scrollTo(scrollPosition.left, scrollPosition.top);
+      
+      // Remove mobile scroll prevention
+      document.removeEventListener('touchmove', preventScroll);
+    }
+
+    function preventScroll(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+
+    function getEventY(e) {
+      return e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
     }
 
     function handlePointerDown(e) {
       dragging = true;
       document.body.classList.add('dragging');
-      lockScroll(); // Lock scroll when dragging starts
+      lockScroll();
       
-      const y = (e.touches ? e.touches[0].clientY : e.clientY);
+      const y = getEventY(e);
       startY = y - offsetY;
       cancelAnimationFrame(animId);
+      
+      // Prevent default for better mobile experience
+      if (e.touches) {
+        e.preventDefault();
+      }
     }
 
     function handlePointerMove(e) {
       if (!dragging) return;
-      e.preventDefault(); // Prevent default behavior
       
-      const y = (e.touches ? e.touches.clientY : e.clientY);
-      offsetY = Math.max(Math.min(y - startY, config.MAX_PULL), -config.MAX_PULL);
+      // Prevent scrolling and other default behaviors
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const y = getEventY(e);
+      const maxPull = isMobile ? 120 : config.MAX_PULL;
+      offsetY = Math.max(Math.min(y - startY, maxPull), -maxPull);
       setTransforms(offsetY);
     }
 
@@ -72,7 +100,7 @@
       if (!dragging) return;
       dragging = false;
       document.body.classList.remove('dragging');
-      unlockScroll(); // Unlock scroll when dragging ends
+      unlockScroll();
       springBack();
     }
 
@@ -98,18 +126,27 @@
       animId = requestAnimationFrame(step);
     }
 
-    // Event listeners
+    // Mouse/Pointer events
     card.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
     
-    // Touch events with passive: false to allow preventDefault
+    // Touch events with better mobile handling
     card.addEventListener('touchstart', handlePointerDown, { passive: false });
     window.addEventListener('touchmove', handlePointerMove, { passive: false });
-    window.addEventListener('touchend', handlePointerUp);
+    window.addEventListener('touchend', handlePointerUp, { passive: false });
 
     // Safety nets
     window.addEventListener('pointercancel', () => {
+      if (dragging) {
+        dragging = false;
+        document.body.classList.remove('dragging');
+        unlockScroll();
+        springBack();
+      }
+    });
+
+    window.addEventListener('touchcancel', () => {
       if (dragging) {
         dragging = false;
         document.body.classList.remove('dragging');
@@ -125,7 +162,7 @@
     // Keyboard demo
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
-        offsetY = 80;
+        offsetY = isMobile ? 60 : 80;
         vy = 0;
         setTransforms(offsetY);
         springBack();

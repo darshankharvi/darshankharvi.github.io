@@ -1,9 +1,9 @@
 window.WebShellConfig = {
-  // Bouncy but smooth spring physics
-  SPRING_K: 0.03,      // Medium stiffness
-  DAMPING: 0.18,       // Medium damping for slight bounce
+  // Smoother spring for mobile
+  SPRING_K: 0.02,
+  DAMPING: 0.25,
   MASS: 1,
-  MAX_PULL: 160,
+  MAX_PULL: 140,
   
   // Terminal settings
   MAX_HISTORY: 20,
