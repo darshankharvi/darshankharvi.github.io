@@ -64,54 +64,33 @@ document.addEventListener('DOMContentLoaded', () => {
     ...baseCommands,
     pwd: {
       description: 'Show current directory',
-      execute: () => '/' + cwd.join('/')
+      execute: () => '/home'
     },
     ls: {
       description: 'List directory contents',
       execute: () => {
-        let dir = getNode(cwd);
+        let dir = getNode(['home']);
         if (!dir) return 'Directory not found';
         let items = Object.entries(dir)
-          .map(([k, v]) => v.type === 'dir' ? `<span class="text-blue-400">${k}/</span>` : `<span class="text-gray-400">${k}</span>`);
+          .filter(([k, v]) => v.type === 'file')  // Only show files
+          .map(([k, v]) => `<span class="text-gray-400">${k}</span>`);
         return items.join('  ');
       }
     },
-    cd: {
-      description: 'Change directory',
-      execute: (args) => {
-        if (args.length === 0) { cwd = ['home']; updateCwdPrompt(); return '/home'; }
-        let target = args[0];
-        if (target === '..') {
-          if (cwd.length > 1) cwd.pop();
-          updateCwdPrompt();
-          return '/' + cwd.join('/');
-        }
-        let curr = getNode(cwd);
-        if (curr && curr[target] && curr[target].type === 'dir') {
-          cwd.push(target);
-          updateCwdPrompt();
-          return '/' + cwd.join('/');
-        }
-        return `cd: no such directory: ${target}`;
-      }
-    },
+   
     cat: {
-      description: 'Show file contents',
-      execute: (args) => {
-        if (args.length === 0) return 'Usage: cat <file>';
-        let dir = getNode(cwd);
-        const file = dir && dir[args[0]];
-        if (file && file.type === 'file') return file.content.replace(/\n/g,'<br/>');
-        return `cat: ${args}: No such file`;
+    description: 'Show file contents',
+    execute: (args) => {
+      if (args.length === 0) return 'Usage: cat <file>';
+      let dir = getNode(['home']);  // Always look in home directory
+      const file = dir && dir[args[0]];
+      if (file && file.type === 'file') return file.content.replace(/\n/g,'<br/>');
+      return `cat: ${args}: No such file`;
       }
     }
   };
-
   function executeCommand(input) {
     if (!input.trim()) return;
-    commandHistory.unshift(input);
-    if (commandHistory.length > config.MAX_HISTORY) commandHistory.pop();
-    updateHistoryPanel();
 
     const commandElement = document.createElement('div');
     commandElement.className = 'mt-2';
@@ -224,15 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.querySelectorAll('[data-go]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const sec = a.getAttribute('data-go');
-      executeCommand(`cd ${sec}`);
-      executeCommand(`cat ${sec}.txt`);
-      updateCwdPrompt();
+  document.querySelectorAll('[data-file]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const filename = a.getAttribute('data-file');
+    executeCommand(`cat ${filename}`);
     });
   });
+
 
   document.getElementById('minimize').addEventListener('click', () => {
     output.innerHTML += '<div class="text-gray-500">Window minimized (simulated)</div>';
@@ -290,6 +268,27 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.addEventListener('touchend', () => {
       document.body.classList.remove('noscroll');
+    });
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  // Hamburger menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      const icon = mobileMenuBtn.querySelector('i');
+      icon.classList.toggle('fa-bars');
+      icon.classList.toggle('fa-times');
+    });
+    document.querySelectorAll('#mobile-menu .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        const icon = mobileMenuBtn.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      });
     });
   }
 });

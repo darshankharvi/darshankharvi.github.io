@@ -45,10 +45,10 @@ window.ResumeData = {
   ],
   
   contact: {
-    name: "Darshan Durga Kharvi",
-    phone: "+91 6363167113",
-    email: "darshankharvi100@gmail.com",
-    location: "Bengaluru‑560064, India",
-    linkedin: "www.linkedin.com/in/darshankharvi"
+  name: "Darshan Durga Kharvi",
+  phone: '<a href="tel:+916363167113" style="color: #68d391; text-decoration: underline;">+91 6363167113</a>',
+  email: '<a href="mailto:darshankharvi100@gmail.com" style="color: #68d391; text-decoration: underline;">darshankharvi100@gmail.com</a>',
+  location: "Bengaluru‑560064, India",
+  linkedin: '<a href="https://www.linkedin.com/in/darshankharvi" target="_blank" rel="noopener noreferrer" style="color: #68d391; text-decoration: underline;">www.linkedin.com/in/darshankharvi</a>'
   }
 };

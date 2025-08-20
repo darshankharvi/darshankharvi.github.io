@@ -60,3 +60,20 @@
   top: 0 !important;
   left: 0 !important;
 }
+/* ... your existing styles ... */
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .container { padding: 8px; }
+  .glass, #badgeCard { max-width: 90vw; }
+  .terminal-output { font-size: 14px; padding: 10px; }
+  .nav-link { min-height: 44px; font-size: 15px; }
+  #badgeCard, .glass { width: auto !important; min-width: 0; }
+  aside, section { width: 100%; }
+  .flex.items-center.mb-4 { flex-wrap: wrap; }
+  body { padding: 0 !important; }
+}
+input[type="text"], .command-input {
+  font-size: 16px !important; /* Prevents iOS zoom */
+  min-height: 44px;
+}

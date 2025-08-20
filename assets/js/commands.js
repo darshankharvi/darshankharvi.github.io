@@ -34,7 +34,6 @@ window.TerminalCommands = (function() {
           ["whoami", "Display current user information"],
           ["pwd", "Show current directory"],
           ["ls", "List directory contents"],
-          ["cd <dir>", "Change directory"],
           ["cat <file>", "Show file contents"],
           ["grep <pattern>", "Search for keywords in resume"],
           ["sleep <seconds>", "Delay for a specified amount of seconds"]
@@ -48,6 +47,7 @@ window.TerminalCommands = (function() {
         return html;
       }
     },
+
 
     clear: {
       description: 'Clear the terminal screen',
